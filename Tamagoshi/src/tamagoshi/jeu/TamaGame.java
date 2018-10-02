@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import tamagoshi.tamagoshi.Tamagoshi;
 import tamagoshi.util.Utilisateur;
 
-
-
 /**
  * @author thibaut
  *
@@ -41,7 +39,7 @@ public class TamaGame {
 	
 	public boolean initialisation() {
 		String str="";		
-		for(int i=0;i<nbTamagoshi-1;i++) {
+		for(int i=0;i<nbTamagoshi;i++) {
 			Utilisateur.afficheEcran("Saisir nom du Tamagoshi");
 			str=Utilisateur.saisieClavier();
 			Tamagoshi t=new Tamagoshi(str);
@@ -82,31 +80,40 @@ public class TamaGame {
 		return listInLife.isEmpty();
 	}
 	
-	public void play() {
-		String choix="";
+	public void play() {		
 		while(!this.fini()) {
-			for(Tamagoshi tamagoshi : listInLife) {
-				choix="";
-				tamagoshi.parle();
-				while(!(choix.equals("oui")||choix.equals("non"))) {
-					choix=Utilisateur.saisieClavier();
-				}
-				if(choix.equals("oui")){
-					tamagoshi.mange();
-				}
-				tamagoshi.consommeEnergie();
-				if(!tamagoshi.isLife()){
-					listInLife.remove(tamagoshi);
-				}
-				else {
-					score++;
-				}
+			for(Tamagoshi tamagoshi : listDepart) {
+				if(listInLife.contains(tamagoshi)) {
+					ActionTamgoshi(tamagoshi);
+				}				
 			}
 		}
-		Utilisateur.afficheEcran("Fin du jeu");
-		Utilisateur.afficheEcran("le score est "+score);
-	}
+		this.endGame();
 		
+	}
+	
+	private void ActionTamgoshi(Tamagoshi tamagoshi) {
+		String choix="";
+		tamagoshi.parle();
+		while(!(choix.equals("oui")||choix.equals("non"))) {
+			choix=Utilisateur.saisieClavier();
+		}
+		if(choix.equals("oui")){
+			tamagoshi.mange();
+		}
+		tamagoshi.consommeEnergie();
+		if(!tamagoshi.isLife()){
+			listInLife.remove(tamagoshi);					
+		}
+		else {
+			score++;
+		}
+		
+	}
+
+	public void endGame() {
+		Utilisateur.afficheEcran("Fin du jeu le score est "+score);
+	}
 	
 
 
