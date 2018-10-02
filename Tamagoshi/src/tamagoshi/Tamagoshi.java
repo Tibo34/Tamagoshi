@@ -9,6 +9,10 @@ import java.util.Random;
  * @author Thibaut
  *
  */
+/**
+ * @author thiba
+ *
+ */
 class Tamagoshi {
 	
 	private int age;
@@ -31,6 +35,49 @@ class Tamagoshi {
 		this.maxEnergy =5+rand.nextInt(9-5);
 		this.energy = 3+rand.nextInt(7-3);
 		this.name = name;
+	}
+	/**
+	 * 
+	 * @return 
+	 * >4 heureux sinon affamé
+	 * 
+	 */
+	public boolean parle() {
+		
+		if(energy>4) {
+			System.out.println(name+" heureux");
+			return true;
+		}
+		else {
+			System.out.println(name+" affamé");
+			return false;
+		}		
+	}
+	
+	public boolean consommeEnergie() {
+		energy--;
+		if(energy<=0) {
+			System.out.println(name+" est KO");
+			return false;
+		}
+		return true;
+	}
+	
+	
+	
+	/**
+	 * @return
+	 */
+	public boolean mange() {
+		if(energy<maxEnergy) {
+			energy+=1+rand.nextInt(3-1);
+			System.out.println(name+" est content, il a bien mangé!");
+			return true;
+		}
+		else {
+			System.out.println(name+"  n'a pas faim !.");
+			return false;
+		}
 	}
 
 	/**
@@ -132,9 +179,10 @@ class Tamagoshi {
 	public static void main(String[] args) {
 		Tamagoshi t1=new Tamagoshi("Jojo");
 		System.out.println(t1);
+		t1.parle();
+		t1.mange();
 		Random r1=new Random();
-		System.out.println(5+r1.nextInt(9-5));
-		System.out.println(3+r1.nextInt(7-3));
+		
 	
 	}
 
