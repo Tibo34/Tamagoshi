@@ -1,7 +1,7 @@
 /**
  * 
  */
-package tamagoshi;
+package tamagoshi.tamagoshi;
 
 import java.util.Random;
 
@@ -169,6 +169,10 @@ class Tamagoshi {
 	public String toString() {
 		return "Tamagoshi [age=" + age + ", maxEnergy=" + maxEnergy + ", energy=" + energy + ", name=" + name + "]";
 	}
+	
+	public boolean isLife() {
+		return energy>0;
+	}
 
 	/**
 	 * @param args
@@ -178,7 +182,12 @@ class Tamagoshi {
 		System.out.println(t1);
 		t1.parle();
 		t1.mange();
-		Random r1=new Random();
+		int i=0;
+		while(t1.isLife()){
+			System.out.println("tour :"+i);
+			t1.consommeEnergie();
+			i++;
+		}	
 		
 	
 	}
