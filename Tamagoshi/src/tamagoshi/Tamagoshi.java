@@ -9,10 +9,7 @@ import java.util.Random;
  * @author Thibaut
  *
  */
-/**
- * @author thiba
- *
- */
+
 class Tamagoshi {
 	
 	private int age;
