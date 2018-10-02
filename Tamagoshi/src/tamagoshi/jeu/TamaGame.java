@@ -17,7 +17,7 @@ public class TamaGame {
 	private int nbTour=5;
 	private ArrayList<Tamagoshi> listDepart;
 	private ArrayList<Tamagoshi> listInLife;
-	private int score=0;
+
 
 	/**
 	 * 
@@ -136,7 +136,7 @@ public class TamaGame {
 		for (Tamagoshi tamagoshi : listDepart) {
 			nb+=tamagoshi.getAge();
 		}
-		return 0;
+		return nb;
 	}
 
 	/**
