@@ -14,6 +14,7 @@ import tamagoshi.util.Utilisateur;
 public class TamaGame {
 	
 	private int nbTamagoshi=4;
+	private int nbTour=5;
 	private ArrayList<Tamagoshi> listDepart;
 	private ArrayList<Tamagoshi> listInLife;
 	private int score=0;
@@ -76,42 +77,52 @@ public class TamaGame {
 		}
 		return str;
 	}
-	public boolean fini() {
-		return listInLife.isEmpty();
+	public boolean isEnd() {
+		return listInLife.isEmpty()&&nbTour!=0;
 	}
 	
 	public void play() {		
-		while(!this.fini()) {
+		while(!this.isEnd()) {
 			for(Tamagoshi tamagoshi : listDepart) {
 				if(listInLife.contains(tamagoshi)) {
-					ActionTamgoshi(tamagoshi);
+					tamagoshi.parle();
 				}				
 			}
+			Utilisateur.afficheEcran("Qui voulez-vous nourrir?");
+			for(Tamagoshi tamagoshi : listDepart) {
+				if(listInLife.contains(tamagoshi)) {
+					Utilisateur.afficheEcran(tamagoshi.getName()+" "+listInLife.indexOf(tamagoshi));
+				}				
+			}
+			int choix=-1;
+			while(choix<0&&choix>listInLife.size()) {
+				try {
+				choix=Integer.parseInt(Utilisateur.saisieClavier());
+				}
+				catch (NumberFormatException e) {
+					Utilisateur.afficheEcran("ce n'est pas un nombre");
+				}
+			}
+			listInLife.get(choix).mange();
+			for (Tamagoshi tamagoshi : listInLife) {
+				tamagoshi.consommeEnergie();
+				if(tamagoshi.isLife()) {
+					tamagoshi.vieillir();
+				}
+				else {
+					listInLife.remove(tamagoshi);
+				}
+			}
+			nbTour--;
 		}
 		this.endGame();
 		
 	}
 	
-	private void ActionTamgoshi(Tamagoshi tamagoshi) {
-		String choix="";
-		tamagoshi.parle();
-		while(!(choix.equals("oui")||choix.equals("non"))) {
-			choix=Utilisateur.saisieClavier();
-		}
-		if(choix.equals("oui")){
-			tamagoshi.mange();
-		}
-		tamagoshi.consommeEnergie();
-		if(!tamagoshi.isLife()){
-			listInLife.remove(tamagoshi);					
-		}
-		else {
-			score++;
-		}
-		
-	}
+	
 
 	public void endGame() {
+		int score=CalculScore();
 		Utilisateur.afficheEcran("Fin du jeu le score est "+score);
 	}
 	
@@ -119,6 +130,14 @@ public class TamaGame {
 
 	
 	
+
+	private int CalculScore() {
+		int nb=0;
+		for (Tamagoshi tamagoshi : listDepart) {
+			nb+=tamagoshi.getAge();
+		}
+		return 0;
+	}
 
 	/**
 	 * @param args

@@ -175,6 +175,10 @@ import tamagoshi.util.Utilisateur;
 	public boolean isLife() {
 		return energy>0;
 	}
+	
+	public void vieillir() {
+		age++;		
+	}
 
 	/**
 	 * @param args
