@@ -5,12 +5,14 @@ package tamagoshi.tamagoshi;
 
 import java.util.Random;
 
+import tamagoshi.util.Utilisateur;
+
 /**
  * @author Thibaut
  *
  */
 
-class Tamagoshi {
+ public class Tamagoshi {
 	
 	private int age;
 	private int maxEnergy;
@@ -40,13 +42,13 @@ class Tamagoshi {
 	 * 
 	 */
 	public boolean parle() {
-		
+		Utilisateur.afficheEcran("Que voulez-vous faire?");
 		if(energy>4) {
-			System.out.println(name+" heureux");
+			Utilisateur.afficheEcran(name+" est heureux");
 			return true;
 		}
 		else {
-			System.out.println(name+" affamé");
+			Utilisateur.afficheEcran(name+" affamé voulez-vous lui donner à mangé?");
 			return false;
 		}		
 	}
@@ -54,7 +56,7 @@ class Tamagoshi {
 	public boolean consommeEnergie() {
 		energy--;
 		if(energy<=0) {
-			System.out.println(name+" est KO");
+			Utilisateur.afficheEcran(name+" est KO");
 			return false;
 		}
 		return true;
@@ -68,11 +70,11 @@ class Tamagoshi {
 	public boolean mange() {
 		if(energy<maxEnergy) {
 			energy+=1+rand.nextInt(3-1);
-			System.out.println(name+" est content, il a bien mangé!");
+			Utilisateur.afficheEcran(name+" est content, il a bien mangé!");
 			return true;
 		}
 		else {
-			System.out.println(name+"  n'a pas faim !.");
+			Utilisateur.afficheEcran(name+"  n'a pas faim !.");
 			return false;
 		}
 	}
@@ -179,17 +181,18 @@ class Tamagoshi {
 	 */
 	public static void main(String[] args) {
 		Tamagoshi t1=new Tamagoshi("Jojo");
-		System.out.println(t1);
+		Utilisateur.afficheEcran(t1);
 		t1.parle();
 		t1.mange();
 		int i=0;
 		while(t1.isLife()){
-			System.out.println("tour :"+i);
+			Utilisateur.afficheEcran("tour :"+i);
 			t1.consommeEnergie();
 			i++;
 		}	
 		
 	
 	}
+	
 
 }
