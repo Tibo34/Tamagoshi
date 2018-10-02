@@ -42,13 +42,12 @@ import tamagoshi.util.Utilisateur;
 	 * 
 	 */
 	public boolean parle() {
-		Utilisateur.afficheEcran("Que voulez-vous faire?");
 		if(energy>4) {
 			Utilisateur.afficheEcran(name+" est heureux");
 			return true;
 		}
 		else {
-			Utilisateur.afficheEcran(name+" affamé voulez-vous lui donner à mangé?");
+			Utilisateur.afficheEcran(name+" est affamé ");
 			return false;
 		}		
 	}

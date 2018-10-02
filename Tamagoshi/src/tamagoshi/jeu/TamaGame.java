@@ -78,7 +78,7 @@ public class TamaGame {
 		return str;
 	}
 	public boolean isEnd() {
-		return listInLife.isEmpty()&&nbTour!=0;
+		return listInLife.isEmpty()||nbTour==0;
 	}
 	
 	public void play() {		
@@ -95,7 +95,7 @@ public class TamaGame {
 				}				
 			}
 			int choix=-1;
-			while(choix<0&&choix>listInLife.size()) {
+			while(choix<0||choix>listInLife.size()) {
 				try {
 				choix=Integer.parseInt(Utilisateur.saisieClavier());
 				}
@@ -104,15 +104,18 @@ public class TamaGame {
 				}
 			}
 			listInLife.get(choix).mange();
-			for (Tamagoshi tamagoshi : listInLife) {
-				tamagoshi.consommeEnergie();
-				if(tamagoshi.isLife()) {
-					tamagoshi.vieillir();
-				}
-				else {
-					listInLife.remove(tamagoshi);
+			for (Tamagoshi tamagoshi : listDepart) {
+				if(listInLife.contains(tamagoshi)) {
+					tamagoshi.consommeEnergie();
+					if(tamagoshi.isLife()) {
+						tamagoshi.vieillir();
+					}
+					else {
+						listInLife.remove(tamagoshi);
+					}
 				}
 			}
+			Utilisateur.afficheEcran("nombre de tour restant : "+nbTour);
 			nbTour--;
 		}
 		this.endGame();
