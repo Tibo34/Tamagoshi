@@ -38,6 +38,10 @@ public class TamaGame {
 		this.initialisation();
 	}
 	
+	/**
+	 * initialisation initialise le jeu
+	 * @return true si l'initialisation a bien eu lieu et false sinon
+	 */
 	public boolean initialisation() {
 		String str="";		
 		for(int i=0;i<nbTamagoshi;i++) {
@@ -54,7 +58,7 @@ public class TamaGame {
 		
 	}
 		
-
+	
 	private void addList(Tamagoshi t) {
 		listDepart.add(t);
 		listInLife.add(t);		
@@ -81,6 +85,10 @@ public class TamaGame {
 		return listInLife.isEmpty()||nbTour==0;
 	}
 	
+	
+	/**
+	 * Joue une partie
+	 */
 	public void play() {		
 		while(!this.isEnd()) {
 			for(Tamagoshi tamagoshi : listDepart) {
@@ -123,30 +131,25 @@ public class TamaGame {
 	}
 	
 	
-
+	/**
+	 * Affichage de fin du jeu
+	 */
 	public void endGame() {
 		int score=CalculScore();
 		Utilisateur.afficheEcran("Fin du jeu le score est "+score);
 	}
 	
-
-
 	
-	
-
+	/**
+	 * Calcule le score
+	 * @return le score du joueur
+	 */
 	private int CalculScore() {
 		int nb=0;
 		for (Tamagoshi tamagoshi : listDepart) {
 			nb+=tamagoshi.getAge();
 		}
 		return nb;
-	}
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		
 	}
 
 }

@@ -35,11 +35,10 @@ import tamagoshi.util.Utilisateur;
 		this.energy = 3+rand.nextInt(7-3);
 		this.name = name;
 	}
+	
 	/**
-	 * 
-	 * @return 
-	 * >4 heureux sinon affamé
-	 * 
+	 * parle fait parlé le tamagoshi
+	 * @return true si le tamagoshi est heureux et false sinon	 
 	 */
 	public boolean parle() {
 		if(energy>4) {
@@ -51,7 +50,10 @@ import tamagoshi.util.Utilisateur;
 			return false;
 		}		
 	}
-	
+	/**
+	 * consomeEnergie décrémente l'énergie du tamagoshi
+	 * @return true si l'énergie du tamagoshi reste supérieur à 0 et false sinon
+	 */
 	public boolean consommeEnergie() {
 		energy--;
 		if(energy<=0) {
@@ -64,7 +66,8 @@ import tamagoshi.util.Utilisateur;
 	
 	
 	/**
-	 * @return
+	 * mange fait manger le tamagoshi en ajoutant entre 1 et 3 à l'énergie
+	 * @return true si le tamagoshi a bien mangé et false sinon
 	 */
 	public boolean mange() {
 		if(energy<maxEnergy) {
@@ -175,6 +178,9 @@ import tamagoshi.util.Utilisateur;
 		return energy>0;
 	}
 	
+	/**
+	 * vieillir augmente l'age du tamagoshi
+	 */
 	public void vieillir() {
 		age++;		
 	}
