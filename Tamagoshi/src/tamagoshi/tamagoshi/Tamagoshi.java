@@ -89,83 +89,13 @@ import tamagoshi.util.Utilisateur;
 		return age;
 	}
 
-	/**
-	 * @param age the age to set
-	 */
-	public void setAge(int age) {
-		this.age = age;
-	}
-
-	/**
-	 * @return the maxEnergy
-	 */
-	public int getMaxEnergy() {
-		return maxEnergy;
-	}
-
-	/**
-	 * @param maxEnergy the maxEnergy to set
-	 */
-	public void setMaxEnergy(int maxEnergy) {
-		this.maxEnergy = maxEnergy;
-	}
-
-	/**
-	 * @return the energy
-	 */
-	public int getEnergy() {
-		return energy;
-	}
-
-	/**
-	 * @param energy the energy to set
-	 */
-	public void setEnergy(int energy) {
-		this.energy = energy;
-	}
-
-	/**
-	 * @return the name
+	/** 
+	 * @return le nom du tamagoshi
 	 */
 	public String getName() {
 		return name;
 	}
 
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
-	 * @return the lifeTime
-	 */
-	public static int getLifeTime() {
-		return lifeTime;
-	}
-
-	/**
-	 * @param lifeTime the lifeTime to set
-	 */
-	public static void setLifeTime(int lifeTime) {
-		Tamagoshi.lifeTime = lifeTime;
-	}
-
-	/**
-	 * 
-	 */
-	public Tamagoshi() {
-		// TODO Auto-generated constructor stub
-	}
-
-	public Random getRand() {
-		return rand;
-	}
-
-	public void setRand(Random rand) {
-		this.rand = rand;
-	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
@@ -175,6 +105,10 @@ import tamagoshi.util.Utilisateur;
 		return "Tamagoshi [age=" + age + ", maxEnergy=" + maxEnergy + ", energy=" + energy + ", name=" + name + "]";
 	}
 	
+	/**
+	 * Détermine si le tamagoshi est en vie
+	 * @return true si la tamgoshi est en vie et false sinon
+	 */
 	public boolean isLife() {
 		return energy>0;
 	}

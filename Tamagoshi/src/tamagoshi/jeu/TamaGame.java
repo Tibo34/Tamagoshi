@@ -8,7 +8,7 @@ import tamagoshi.tamagoshi.Tamagoshi;
 import tamagoshi.util.Utilisateur;
 
 /**
- * @author thibaut
+ * @author Thibaut
  *
  */
 public class TamaGame {
