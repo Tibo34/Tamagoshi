@@ -50,6 +50,7 @@ import tamagoshi.util.Utilisateur;
 			return false;
 		}		
 	}
+	
 	/**
 	 * consomeEnergie décrémente l'énergie du tamagoshi
 	 * @return true si l'énergie du tamagoshi reste supérieur à 0 et false sinon

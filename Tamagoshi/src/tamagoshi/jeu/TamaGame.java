@@ -18,9 +18,8 @@ public class TamaGame {
 	private ArrayList<Tamagoshi> listDepart;
 	private ArrayList<Tamagoshi> listInLife;
 
-
 	/**
-	 * 
+	 * Jeu par défault avec 4 tamagoshi
 	 */
 	public TamaGame() {
 		this.listDepart=new ArrayList<Tamagoshi>();
@@ -29,7 +28,7 @@ public class TamaGame {
 	}
 
 	/**
-	 * 
+	 * Créer le jeu et l'initialise avec un nombre de tamagoshi
 	 */
 	public TamaGame(int nb) {
 		this.listDepart=new ArrayList<Tamagoshi>();
@@ -42,7 +41,7 @@ public class TamaGame {
 	 * initialisation initialise le jeu
 	 * @return true si l'initialisation a bien eu lieu et false sinon
 	 */
-	public boolean initialisation() {
+	private boolean initialisation() {
 		String str="";		
 		for(int i=0;i<nbTamagoshi;i++) {
 			Utilisateur.afficheEcran("Saisir nom du Tamagoshi");
@@ -62,10 +61,7 @@ public class TamaGame {
 	private void addList(Tamagoshi t) {
 		listDepart.add(t);
 		listInLife.add(t);		
-	}
-	
-	
-	
+	}	
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
@@ -81,7 +77,8 @@ public class TamaGame {
 		}
 		return str;
 	}
-	public boolean isEnd() {
+	
+	private boolean isEnd() {
 		return listInLife.isEmpty()||nbTour==0;
 	}
 	
@@ -91,50 +88,66 @@ public class TamaGame {
 	 */
 	public void play() {		
 		while(!this.isEnd()) {
-			for(Tamagoshi tamagoshi : listDepart) {
-				if(listInLife.contains(tamagoshi)) {
-					tamagoshi.parle();
-				}				
-			}
+			AllParle(listInLife);			
 			Utilisateur.afficheEcran("Qui voulez-vous nourrir?");
-			for(Tamagoshi tamagoshi : listDepart) {
-				if(listInLife.contains(tamagoshi)) {
-					Utilisateur.afficheEcran(tamagoshi.getName()+" "+listInLife.indexOf(tamagoshi));
-				}				
-			}
-			int choix=-1;
-			while(choix<0||choix>listInLife.size()) {
-				try {
-				choix=Integer.parseInt(Utilisateur.saisieClavier());
-				}
-				catch (NumberFormatException e) {
-					Utilisateur.afficheEcran("ce n'est pas un nombre");
-				}
-			}
-			listInLife.get(choix).mange();
-			for (Tamagoshi tamagoshi : listDepart) {
-				if(listInLife.contains(tamagoshi)) {
-					tamagoshi.consommeEnergie();
-					if(tamagoshi.isLife()) {
-						tamagoshi.vieillir();
-					}
-					else {
-						listInLife.remove(tamagoshi);
-					}
-				}
-			}
+			InlifeChoix(listInLife);			
+			int choice=choiceTamagoshi(listInLife);			
+			listInLife.get(choice).mange();
+			avanceTour(listInLife);		
 			Utilisateur.afficheEcran("nombre de tour restant : "+nbTour);
 			nbTour--;
 		}
-		this.endGame();
-		
+		this.endGame();		
+	}
+	
+	private void avanceTour(ArrayList<Tamagoshi> list) {
+		ArrayList<Tamagoshi> removeList=new ArrayList<Tamagoshi>();
+		for(Tamagoshi tam : list) {
+			tam.consommeEnergie();
+			if(!tam.isLife()) {
+				removeList.add(tam);
+			}
+			else {
+				tam.vieillir();
+			}
+		}
+		list.removeAll(removeList);		
+	}
+	
+	
+	private int choiceTamagoshi(ArrayList<Tamagoshi> list) {
+		int choice=-1;
+		while(choice<-1||choice>list.size()) {
+			try {
+				choice=Integer.parseInt(Utilisateur.saisieClavier());
+			}
+			catch(NumberFormatException e){
+				Utilisateur.afficheEcran("ce n'est pas un nombre");
+				choice=-1;
+			}
+		}
+		return choice;
+	}
+	
+	private void InlifeChoix(ArrayList<Tamagoshi> list) {
+		String str="";
+		for(Tamagoshi tam : list) {
+			str+=tam.getName()+" "+list.indexOf(tam)+"\t";
+		}
+		Utilisateur.afficheEcran(str);
+	}
+	
+	private void AllParle(ArrayList<Tamagoshi> list) {
+		for(Tamagoshi tam : list) {
+			tam.parle();
+		}
 	}
 	
 	
 	/**
 	 * Affichage de fin du jeu
 	 */
-	public void endGame() {
+	private void endGame() {
 		int score=CalculScore();
 		Utilisateur.afficheEcran("Fin du jeu le score est "+score);
 	}
