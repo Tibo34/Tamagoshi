@@ -38,17 +38,42 @@ public class TamaGame {
 	}
 	
 	/**
+	 * Créer le jeu et l'initialise avec un nombre de tamagoshi
+	 */
+	public TamaGame(String[]name) {
+		this.listDepart=new ArrayList<Tamagoshi>();
+		this.listInLife=new ArrayList<Tamagoshi>();
+		this.nbTamagoshi=name.length;
+		this.initialisation(name);
+	}
+	
+	/**
 	 * initialisation initialise le jeu
 	 * @return true si l'initialisation a bien eu lieu et false sinon
 	 */
 	private boolean initialisation() {
 		String str="";		
 		for(int i=0;i<nbTamagoshi;i++) {
-			Utilisateur.afficheEcran("Saisir nom du Tamagoshi");
+			Utilisateur.afficheEcran("Saisir nom du Tamagoshi n° "+i);
 			str=Utilisateur.saisieClavier();
 			Tamagoshi t=new Tamagoshi(str);
-			addList(t);
-			Utilisateur.afficheEcran(nbTamagoshi-i+" restant Tamagoshi");
+			addList(t);		
+		}		
+		if(listDepart.isEmpty()||listInLife.isEmpty()) {
+			return false;
+		}
+		return true;
+		
+	}
+	
+	/**
+	 * initialisation initialise le jeu
+	 * @return true si l'initialisation a bien eu lieu et false sinon
+	 */
+	private boolean initialisation(String[]name) {
+		for(int i=0;i<nbTamagoshi;i++) {			
+			Tamagoshi t=new Tamagoshi(name[i]);
+			addList(t);		
 		}		
 		if(listDepart.isEmpty()||listInLife.isEmpty()) {
 			return false;
@@ -88,10 +113,11 @@ public class TamaGame {
 	 */
 	public void play() {		
 		while(!this.isEnd()) {
-			AllParle(listInLife);			
-			Utilisateur.afficheEcran("Qui voulez-vous nourrir?");
-			InlifeChoix(listInLife);			
-			int choice=choiceTamagoshi(listInLife);			
+			AllParle(listInLife);
+			InlifeChoix(listInLife);
+			Utilisateur.afficheEcran("Qui voulez-vous nourrir?");						
+			int choice=choiceTamagoshi(listInLife);
+			Utilisateur.afficheEcran(choice);
 			listInLife.get(choice).mange();
 			avanceTour(listInLife);		
 			Utilisateur.afficheEcran("nombre de tour restant : "+nbTour);
@@ -117,7 +143,7 @@ public class TamaGame {
 	
 	private int choiceTamagoshi(ArrayList<Tamagoshi> list) {
 		int choice=-1;
-		while(choice<-1||choice>list.size()) {
+		do  {
 			try {
 				choice=Integer.parseInt(Utilisateur.saisieClavier());
 			}
@@ -125,14 +151,14 @@ public class TamaGame {
 				Utilisateur.afficheEcran("ce n'est pas un nombre");
 				choice=-1;
 			}
-		}
+		}while(choice<0 && choice>list.size() );
 		return choice;
 	}
 	
 	private void InlifeChoix(ArrayList<Tamagoshi> list) {
 		String str="";
 		for(Tamagoshi tam : list) {
-			str+=tam.getName()+" "+list.indexOf(tam)+"\t";
+			str+=tam.getName()+"\t"+list.indexOf(tam)+"\t";
 		}
 		Utilisateur.afficheEcran(str);
 	}
