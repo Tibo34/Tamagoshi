@@ -11,21 +11,35 @@ import tamagoshi.util.Utilisateur;
  * @author Thibaut
  *
  */
-
  public class Tamagoshi {
 	
+	 /**
+	  * age int
+	  */
 	private int age;
+	/**
+	 * maxEnergy int
+	 */
 	private int maxEnergy;
+	/**
+	 * energy int
+	 */
 	private int energy;
+	/**
+	 * name string
+	 */
 	private String name;
+	/**
+	 * lifeTime int
+	 */
 	private static int lifeTime =10;
+	/**
+	 * rand Random
+	 */
 	private Random rand;
 
 	/**
-	 * @param age
-	 * @param maxEnergy
-	 * @param energy
-	 * @param name
+	 * @param name string nom du tamagoshi
 	 */
 	public Tamagoshi(String name) {
 		super();
@@ -37,7 +51,7 @@ import tamagoshi.util.Utilisateur;
 	}
 	
 	/**
-	 * parle fait parlé le tamagoshi
+	 * parle fait parlé le tamagoshi.
 	 * @return true si le tamagoshi est heureux et false sinon	 
 	 */
 	public boolean parle() {
@@ -46,7 +60,7 @@ import tamagoshi.util.Utilisateur;
 			return true;
 		}
 		else {
-			Utilisateur.afficheEcran(name+" est affamé ");
+			Utilisateur.afficheEcran(name+" est affamé "+energy);
 			return false;
 		}		
 	}
@@ -66,14 +80,15 @@ import tamagoshi.util.Utilisateur;
 	
 	
 	
+	
 	/**
-	 * mange fait manger le tamagoshi en ajoutant entre 1 et 3 à l'énergie
+	 * mange fait manger le tamagoshi en ajoutant entre 1 et 3 à l'énergie.
 	 * @return true si le tamagoshi a bien mangé et false sinon
 	 */
 	public boolean mange() {
 		if(energy<maxEnergy) {
 			energy+=1+rand.nextInt(3-1);
-			Utilisateur.afficheEcran(name+" est content, il a bien mangé!");
+			Utilisateur.afficheEcran(name+" est content, il a bien mangé!"+energy);
 			return true;
 		}
 		else {
@@ -119,24 +134,13 @@ import tamagoshi.util.Utilisateur;
 	public void vieillir() {
 		age++;		
 	}
+	
+	
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		Tamagoshi t1=new Tamagoshi("Jojo");
-		Utilisateur.afficheEcran(t1);
-		t1.parle();
-		t1.mange();
-		int i=0;
-		while(t1.isLife()){
-			Utilisateur.afficheEcran("tour :"+i);
-			t1.consommeEnergie();
-			i++;
-		}	
+	
 		
 	
-	}
+	
 	
 
 }
