@@ -37,6 +37,15 @@ import tamagoshi.util.Utilisateur;
 	 * rand Random
 	 */
 	private Random rand;
+	/**
+	 * fun int
+	 */
+	private int fun;
+	/**
+	 * maxFun int
+	 */
+	private int maxFun;
+	
 
 	/**
 	 * @param name string nom du tamagoshi
@@ -47,6 +56,8 @@ import tamagoshi.util.Utilisateur;
 		this.rand=new Random();
 		this.maxEnergy =5+rand.nextInt(9-5);
 		this.energy = 3+rand.nextInt(7-3);
+		this.fun=3+rand.nextInt(7-3);
+		this.maxFun=5+rand.nextInt(9-5);
 		this.name = name;
 	}
 	
@@ -55,12 +66,17 @@ import tamagoshi.util.Utilisateur;
 	 * @return true si le tamagoshi est heureux et false sinon	 
 	 */
 	public boolean parle() {
-		if(energy>4) {
+		if(energy>4&&fun>4) {
 			Utilisateur.afficheEcran(name+" est heureux");
 			return true;
 		}
 		else {
-			Utilisateur.afficheEcran(name+" est affamé "+energy);
+			if(energy<=4) {
+				Utilisateur.afficheEcran(name+" est affamé "+energy);
+			}
+			if(fun<=4) {
+				Utilisateur.afficheEcran(name+" s'ennuie à mourrir ! "+fun);
+			}
 			return false;
 		}		
 	}
@@ -72,6 +88,19 @@ import tamagoshi.util.Utilisateur;
 	public boolean consommeEnergie() {
 		energy--;
 		if(energy<=0) {
+			Utilisateur.afficheEcran(name+" est KO");
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * consomme un point de fun.
+	 * @return true si réussi et false sinon.
+	 */
+	public boolean consommeFun() {
+		fun--;
+		if(fun<=0) {
 			Utilisateur.afficheEcran(name+" est KO");
 			return false;
 		}
@@ -93,6 +122,18 @@ import tamagoshi.util.Utilisateur;
 		}
 		else {
 			Utilisateur.afficheEcran(name+"  n'a pas faim !.");
+			return false;
+		}
+	}
+	
+	public boolean fun() {
+		if(fun<maxFun) {
+			fun+=1+rand.nextInt(3-1);
+			Utilisateur.afficheEcran(name+" est content, il a bien jouer!"+fun);
+			return true;
+		}
+		else {
+			Utilisateur.afficheEcran(name+"  laissez moi tranquille je bouquine !.");
 			return false;
 		}
 	}
@@ -125,7 +166,7 @@ import tamagoshi.util.Utilisateur;
 	 * @return true si la tamgoshi est en vie et false sinon
 	 */
 	public boolean isLife() {
-		return energy>0;
+		return energy>0&&fun>0;
 	}
 	
 	/**
@@ -133,6 +174,14 @@ import tamagoshi.util.Utilisateur;
 	 */
 	public void vieillir() {
 		age++;		
+	}
+
+	public static int getLifeTime() {
+		return lifeTime;
+	}
+
+	public static void setLifeTime(int lifeTime) {
+		Tamagoshi.lifeTime = lifeTime;
 	}
 	
 	

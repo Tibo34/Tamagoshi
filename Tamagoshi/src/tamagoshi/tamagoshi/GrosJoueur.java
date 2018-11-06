@@ -23,8 +23,8 @@ public class GrosJoueur extends Tamagoshi {
 	 */
 	public boolean consommeFun() {
 		boolean r=false;
-		r=super.consommeEnergie();
-		r=super.consommeEnergie();
+		r=super.consommeFun();
+		r=super.consommeFun();
 		return r;
 	}
 	

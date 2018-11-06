@@ -38,6 +38,10 @@ public class TamaGame {
 	 * Nombre aléatoire
 	 */
 	private Random rand;
+	/**
+	 * Arraylist de nom
+	 */
+	private ArrayList<String> TamaName;
 
 	/**
 	 * Jeu par défault avec 4 tamagoshi.
@@ -45,8 +49,8 @@ public class TamaGame {
 	public TamaGame() {
 		this.listDepart=new ArrayList<Tamagoshi>();
 		this.listInLife=new ArrayList<Tamagoshi>();
-		this.rand=new Random();
-		this.initialisation();
+		this.TamaName=new ArrayList<String>();
+		this.rand=new Random();		
 	}
 
 	/**
@@ -54,38 +58,46 @@ public class TamaGame {
 	 * @param nb nombre de tamagoshi
 	 */
 	public TamaGame(int nb) {
-		this.listDepart=new ArrayList<Tamagoshi>();
-		this.listInLife=new ArrayList<Tamagoshi>();
-		this.nbTamagoshi=nb;
-		this.rand=new Random();
-		this.initialisation();
+		this();		
+		this.nbTamagoshi=nb;	
 	}
 	
 	/**
 	 * Créer le jeu et l'initialise avec un nombre de tamagoshi
 	 */
 	public TamaGame(String[]name) {
-		this.listDepart=new ArrayList<Tamagoshi>();
-		this.listInLife=new ArrayList<Tamagoshi>();
-		this.nbTamagoshi=name.length;
-		this.rand=new Random();
-		this.initialisation(name);
+		this(name.length);
+		AddName(name);
 	}
 	
+	private void AddName(String[]name) {
+		for(String n : name) {
+			this.TamaName.add(n);
+		}
+	}
 	/**
 	 * initialisation initialise le jeu.
 	 * @return true si l'initialisation a bien eu lieu et false sinon
 	 */
 	private boolean initialisation() {
-		String name="";
-		boolean r=true;
-		for(int i=0;i<nbTamagoshi&&r;i++) {
-			Utilisateur.afficheEcran("Saisir nom du Tamagoshi n° "+i);
-			name=Utilisateur.saisieClavier();			
-			r=addList(typeTamagoshi(name));		
+		boolean r=false;
+		if(TamaName.size()==0) {
+			r=NameTamagoshi();
 		}
-		return r;
-		
+		for(String n : TamaName) {
+			r=addList(typeTamagoshi(n));	
+		}		
+		return r;		
+	}
+	
+	
+	private boolean NameTamagoshi() {
+		int i=0;
+		for(i=0;i<nbTamagoshi;i++) {
+			Utilisateur.afficheEcran("Saisir nom du Tamagoshi n° "+i);
+			TamaName.add(Utilisateur.saisieClavier());		
+		}
+		return i==nbTamagoshi;
 	}
 	/**
 	 * typeTamagoshi crée un tamagoshi de type aléatoire et le retourne.
@@ -103,19 +115,7 @@ public class TamaGame {
 		}
 	}
 	
-	/**
-	 * initialisation initialise le jeu avec un tableau de nom.
-	 * @param array string 
-	 * @return true si l'initialisation a bien eu lieu et false sinon
-	 */
-	private boolean initialisation(String[]name) {
-		boolean r=true;		
-		for(int i=0;i<nbTamagoshi&&r;i++) {		
-			r=addList(typeTamagoshi(name[i]));		
-		}	
-		return true;		
-	}
-		
+
 	/**
 	 * Ajoute un tamagoshi au deux listes.
 	 * @param t le tamagoshi à ajouter
@@ -155,37 +155,40 @@ public class TamaGame {
 	/**
 	 * Joue une partie.
 	 */
-	public void play() {		
+	public void play() {
+		this.initialisation();
 		while(!this.isEnd()) {
-			AllParle(listInLife);
-			InlifeChoix(listInLife);
-			Utilisateur.afficheEcran("Qui voulez-vous nourrir?");						
-			int choice=choiceTamagoshi(listInLife);
-			Utilisateur.afficheEcran(choice);
-			listInLife.get(choice).mange();
-			avanceTour(listInLife);		
+			AllParle();			
+			ChoiceManger();			
+			ChoiceFun();
+			avanceTour();		
 			Utilisateur.afficheEcran("nombre de tour restant : "+nbTour);
 			nbTour--;
 		}
-		this.endGame(listDepart);		
+		this.endGame();		
+	}
+	
+	private void ChoiceManger() {
+		InlifeChoix();
+		Utilisateur.afficheEcran("Qui voulez-vous nourrir?");
+		listInLife.get(choiceTamagoshi()).mange();
+	}
+	
+	private void ChoiceFun() {
+		InlifeChoix();
+		Utilisateur.afficheEcran("Avec qui voulez-vous jouer?");						
+		listInLife.get(choiceTamagoshi()).fun();
 	}
 	
 	/**
 	 * Tour de jeu consomme l'énergie des tamagoshi encore en vie.
 	 * @param list ArrayList de tamagoshi encore en vie
 	 */
-	private void avanceTour(ArrayList<Tamagoshi> list) {
+	private void avanceTour() {
 		ArrayList<Tamagoshi> removeList=new ArrayList<Tamagoshi>();
-		for(Tamagoshi tam : list) {
-			if(tam instanceof GrosJoueur) {
-				((GrosJoueur) tam).consommeFun();
-			}
-			if(tam instanceof GrosMangeur) {
-				((GrosMangeur)tam).consommeEnergie();
-			}
-			else {
-				tam.consommeEnergie();
-			}
+		for(Tamagoshi tam : listInLife) {			
+			 tam.consommeFun();			
+			 tam.consommeEnergie();		
 			if(!tam.isLife()) {
 				removeList.add(tam);
 			}
@@ -193,15 +196,17 @@ public class TamaGame {
 				tam.vieillir();
 			}
 		}
-		list.removeAll(removeList);		
+		Utilisateur.afficheEcran("nombre de tama à enlever : "+removeList.size());
+		Utilisateur.afficheEcran("nombre de tama : "+listInLife.size());
+		listInLife.removeAll(removeList);
+		Utilisateur.afficheEcran("nombre de tama : "+listInLife.size());
 	}
 	
 	/**
 	 * Propose au joueur de nourrir un tamagoshi.
-	 * @param list ArrayList des tamagoshi encore en vie
 	 * @return int le choix du joueur
 	 */
-	private int choiceTamagoshi(ArrayList<Tamagoshi> list) {
+	private int choiceTamagoshi() {
 		int choice=-1;
 		do  {
 			try {
@@ -211,28 +216,26 @@ public class TamaGame {
 				Utilisateur.afficheEcran("ce n'est pas un nombre");
 				choice=-1;
 			}
-		}while(choice<0 && choice>list.size() );
+		}while(choice<0 && choice>listInLife.size() );
 		return choice;
 	}
 	
 	/**
-	 * Affiche les tamgoshi encore en vie et leur numéro.
-	 * @param list ArrayList de Tamagoshi encore en vie
+	 * Affiche les tamgoshi encore en vie et leur numéro.	
 	 */
-	private void InlifeChoix(ArrayList<Tamagoshi> list) {
+	private void InlifeChoix() {
 		String str="";
-		for(Tamagoshi tam : list) {
-			str+=tam.getName()+"\t"+list.indexOf(tam)+"\t";
+		for(Tamagoshi tam : listInLife) {
+			str+=tam.getName()+"\t"+listInLife.indexOf(tam)+"\t";
 		}
 		Utilisateur.afficheEcran(str);
 	}
 	
 	/**
 	 * Fait parler tous les tamagoshi en vie.
-	 * @param list ArrayList tamgoshi en vie.
 	 */
-	private void AllParle(ArrayList<Tamagoshi> list) {
-		for(Tamagoshi tam : list) {
+	private void AllParle() {
+		for(Tamagoshi tam : listInLife) {
 			tam.parle();
 		}
 	}
@@ -242,10 +245,10 @@ public class TamaGame {
 	 * Affichage de fin du jeu.
 	 * @param list ArrayList de tamagoshi.
 	 */
-	private void endGame(ArrayList<Tamagoshi> list) {
-		int score=CalculScore();
+	private void endGame() {
+		double score=CalculScore();
 		String str="";
-		for(Tamagoshi tam : list) {
+		for(Tamagoshi tam : listDepart) {
 			str=tam.getName()+" qui était un "+getType(tam);
 			if(listInLife.contains(tam)) {
 				str+="  a survécu et vous remercie :) ";
@@ -269,14 +272,20 @@ public class TamaGame {
 	
 	/**
 	 * Calcule le score du jeu.
-	 * @return  int le score du joueur
+	 * @return  double le score du joueur
 	 */
-	private int CalculScore() {
+	private double CalculScore() {
 		int nb=0;
+		int max=Tamagoshi.getLifeTime()*listDepart.size();
 		for (Tamagoshi tamagoshi : listDepart) {
-			nb+=tamagoshi.getAge();
+			if(listInLife.contains(tamagoshi)) {
+				nb+=Tamagoshi.getLifeTime();
+			}
+			else {
+				nb+=tamagoshi.getAge();
+			}
 		}
-		return nb;
+		return nb/max*100;
 	}
 	
 	
